@@ -12,12 +12,14 @@ class Create extends Component
     use WithFileUploads;
 
     public $title;
+    public $writer;
     public $content;
     public $category = 'berita'; // Default
     public $image;
 
     protected $rules = [
         'title' => 'required|min:5',
+        'writer' => 'required|string|max:50',
         'content' => 'required',
         'category' => 'required|in:berita,mading',
         'image' => 'nullable|image|max:2048', // Max 2MB
@@ -36,6 +38,7 @@ class Create extends Component
         // Simpan ke Database
         Post::create([
             'title' => $this->title,
+            'writer' => $this->writer,
             'slug' => Str::slug($this->title),
             'content' => $this->content,
             'category' => $this->category,

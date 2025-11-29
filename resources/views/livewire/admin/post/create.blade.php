@@ -16,6 +16,13 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Penulis</label>
+                <input wire:model="writer" type="text" placeholder="Misal: Redaksi Pesantren" 
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pesantren-primary focus:ring-pesantren-primary border p-2">
+                @error('writer') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+            
+            <div>
                 <label class="block text-sm font-medium text-gray-700">Kategori</label>
                 <select wire:model="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pesantren-primary focus:ring-pesantren-primary border p-2">
                     <option value="berita">Berita Pesantren</option>

@@ -23,6 +23,7 @@
             <thead class="bg-pesantren-50 text-pesantren-dark uppercase text-sm font-semibold">
                 <tr>
                     <th class="px-6 py-4">Judul</th>
+                    <th class="px-6 py-4">Penulis</th>
                     <th class="px-6 py-4">Kategori</th>
                     <th class="px-6 py-4">Tanggal</th>
                     <th class="px-6 py-4 text-center">Aksi</th>
@@ -34,6 +35,9 @@
                     <td class="px-6 py-4">
                         <div class="font-medium text-gray-900">{{ $post->title }}</div>
                         <div class="text-xs text-gray-500">{{ Str::limit($post->slug, 30) }}</div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">
+                        {{ $post->writer ?? '-' }}
                     </td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 text-xs font-semibold rounded-full 
