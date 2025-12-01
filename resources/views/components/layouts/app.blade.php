@@ -48,17 +48,29 @@
                 </a>
 
                 <a href="{{ route('admin.pages.index') }}" 
-                   class="flex items-center px-4 py-3 rounded-lg text-md transition-colors duration-200 {{ request()->routeIs('admin.pages.*') ? 'bg-emerald-500/7 text-emerald-500' : 'text-gray-800 hover:bg-black/7' }}">
+                    class="flex items-center px-4 py-3 rounded-lg text-md transition-colors duration-200 {{ request()->routeIs('admin.pages.*') ? 'bg-emerald-500/7 text-emerald-500' : 'text-gray-800 hover:bg-black/7' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     Profil Pesantren
                 </a>
 
-                <a href="{{ route('admin.messages.index') }}" 
+                <a href="{{ route('admin.dorms.index') }}" 
+                    class="flex items-center px-4 py-3 rounded-lg text-md transition-colors duration-200 {{ request()->routeIs('admin.dorms.*') ? 'bg-emerald-500/7 text-emerald-500' : 'text-gray-800 hover:bg-black/7' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3l4 4m0 0l-4 4m4-4H4"></path></svg>
+                    Asrama
+                </a>
+
+                <a href="{{ route('admin.classes.index') }}" 
+                class="flex items-center px-4 py-3 rounded-lg text-md transition-colors duration-200 {{ request()->routeIs('admin.classes.*') ? 'bg-emerald-500/7 text-emerald-500' : 'text-gray-800 hover:bg-black/7' }}">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+                Kelas Diniyah
+                </a>                
+
+                {{-- <a href="{{ route('admin.messages.index') }}" 
                    class="flex items-center px-4 py-3 rounded-lg text-md transition-colors duration-200 {{ request()->routeIs('admin.messages.*') ? 'bg-emerald-500/7 text-emerald-500' : 'text-gray-800 hover:bg-black/7' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     Kotak Masuk
-                    {{-- <span class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">New</span> --}}
-                </a>
+                    <span class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">New</span> 
+                </a> --}}
             </nav>
 
             <div class="p-4 border-t border-pesantren-800">
@@ -83,6 +95,28 @@
                     </button>
                     <h2 class="ml-4 text-xl font-semibold text-slate-900 lg:ml-0">{{ $title ?? 'Dashboard' }}</h2>
                 </div>
+
+                {{-- <div class="hidden md:flex md:items-center md:space-x-4">
+                    <button class="relative text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
+                    </button>
+                </div> --}}
+
+                <a href="{{ route('admin.messages.index') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.messages.*')}}">
+                    <button class="relative text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <!-- Ikon Pesan (Chat Bubble) yang lebih jelas -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Path untuk ikon gelembung pesan dengan tiga titik (...) di dalamnya -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.148A9.006 9.006 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        <!-- Penanda Notifikasi (Dot Merah) -->
+                        <!-- Posisi di kanan atas ikon -->
+                        <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full transform translate-x-1 -translate-y-1"></span>
+                    </button>
+                </a>       
+                
 
                 <div class="flex items-center gap-4">
                     <div class="hidden md:block text-right">

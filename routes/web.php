@@ -39,6 +39,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/berita/tambah', App\Livewire\Admin\Post\Create::class)->name('admin.posts.create');
     Route::get('/berita/{id}/edit', App\Livewire\Admin\Post\Edit::class)->name('admin.posts.edit');
 
+    // Route Asrama
+    Route::get('/asrama', App\Livewire\Admin\Dorm\Index::class)->name('admin.dorms.index');
+    Route::get('/kelas', App\Livewire\Admin\IslamicClass\Index::class)->name('admin.classes.index');
+
+    // Route Santri
+    Route::get('/santri', App\Livewire\Admin\Santri\Index::class)->name('admin.santri.index');
+    Route::get('/santri/tambah', App\Livewire\Admin\Santri\Create::class)->name('admin.santri.create');
+    Route::get('/santri/{id}/edit', App\Livewire\Admin\Santri\Edit::class)->name('admin.santri.edit');
+
     // Route Pesan
     Route::get('/pesan', App\Livewire\Admin\Pesan\Index::class)->name('admin.messages.index');
     
