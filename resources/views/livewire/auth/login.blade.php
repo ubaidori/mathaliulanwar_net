@@ -19,7 +19,7 @@
 
         <div>
             <button type="submit" 
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pesantren-primary hover:bg-pesantren-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pesantren-primary transition duration-150">
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150">
                 <span wire:loading.remove>Masuk</span>
                 <span wire:loading>Memproses...</span>
             </button>

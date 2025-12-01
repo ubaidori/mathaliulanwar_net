@@ -69,7 +69,7 @@
                             <p class="text-sm md:text-base text-gray-500">Pondok Pesantren Mathali'ul Anwar</p>
                         </div>
                         @if($page->image)
-                            <div class="mt-4 md:mt-0 md:ml-6 flex-shrink-0">
+                            <div class="mt-4 md:mt-0 md:ml-6 shrink-0">
                                 <img src="{{ asset('storage/' . $page->image) }}" 
                                      alt="{{ $page->title }}" 
                                      class="rounded-xl shadow-md w-full md:w-64 lg:w-72 h-44 md:h-48 lg:h-56 object-cover object-center border border-gray-200">
@@ -78,7 +78,9 @@
                     </div>
 
                     <div class="prose prose-lg max-w-none text-gray-800 mb-8">
-                        {!! nl2br(e($page->content)) !!}
+                        <div class="trix-content text-gray-700 leading-relaxed space-y-4 text-base md:text-lg">
+                            {!! $page->content !!}
+                        </div>
                     </div>
 
                     <div class="mt-10 pt-6 border-t border-gray-100 flex items-center gap-4 flex-wrap">

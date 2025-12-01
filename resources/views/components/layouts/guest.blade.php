@@ -13,7 +13,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <span class="text-2xl text-slate-800 font-bold text-pesantren-dark">Mathali'ul Anwar</span>
+                    <div class="flex items-center">
+                        <span class="text-2xl text-green-600 font-bold text-pesantren-dark">Mathali'ul Anwar</span>
+                    </div>
                 </div>
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="/" class="hover:text-pesantren-primary text-slate-800 font-medium transition">Home</a>
@@ -22,8 +24,13 @@
                     class="text-slate-800 hover:text-pesantren-primary font-medium transition">
                     Profil
                     </a>
+
+                    <a href="{{ route('public.berita.index') }}" class="hover:text-pesantren-primary font-medium transition">Berita</a>
                     
-                    <a href="#" class="bg-pesantren-primary text-white px-5 py-2 rounded-full hover:bg-pesantren-hover transition">Kontak</a>
+                    <a href="{{ route('public.contact') }}" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition shadow-sm font-medium">
+                        Kontak
+                    </a>
+
                 </div>
             </div>
         </div>

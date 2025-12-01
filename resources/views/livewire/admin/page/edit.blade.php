@@ -9,7 +9,7 @@
     <form wire:submit="update">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-4">
                 
                 <div class="bg-white p-6 shadow-sm rounded-lg border border-gray-100">
                     <div class="mb-4">
@@ -21,13 +21,13 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Isi Konten</label>
-                        <textarea wire:model="content" class="w-full h-96 rounded-md border-gray-300 shadow-sm focus:border-pesantren-primary focus:ring-pesantren-primary p-3 border resize-y"></textarea>
+                        <x-input.rich-text wire:model="content" :value="$content" />
                         @error('content') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-blue-600 cursor-pointer w-full sm:w-auto bg-pesantren-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium shadow-lg flex justify-center">
+                    <button type="submit" class="bg-emerald-600 cursor-pointer w-full sm:w-auto bg-pesantren-primary text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition font-medium shadow-lg flex justify-center">
                         <span wire:loading.remove>Simpan Perubahan</span>
                         <span wire:loading>Menyimpan...</span>
                     </button>

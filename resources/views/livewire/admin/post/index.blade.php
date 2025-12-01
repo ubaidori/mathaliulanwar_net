@@ -1,8 +1,8 @@
 <div>
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Daftar Berita & Mading</h2>
+        <h2 class="text-2xl sm:text-xl font-bold text-gray-800">Daftar Berita & Mading</h2>
         <a href="{{ route('admin.posts.create') }}" 
-           class="bg-pesantren-primary text-white px-4 py-2 rounded-lg hover:bg-pesantren-hover transition flex items-center gap-2 bg-green-400 font-bold border border-green-500 shadow-md hover:shadow-lg hover:bg-green-500">
+           class="bg-pesantren-primary sm:text-sm sm:px-2 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 bg-emerald-600 font-bold border border-green-500 shadow-md hover:shadow-lg">
             + Tambah Baru
         </a>
     </div>
@@ -15,7 +15,7 @@
 
     <div class="mb-4">
         <input wire:model.live="search" type="text" placeholder="Cari judul berita..." 
-               class="w-full md:w-1/3 px-4 py-2 border rounded-lg focus:ring-pesantren-primary focus:border-pesantren-primary">
+               class="w-full md:w-1/3 px-4 py-2 border rounded-lg focus:ring-emerald-500 sm:focus:ring-emerald-500 focus:border-emerald-500 hover:border-emerald-400 hover:bg-emerald-[20] transition">
     </div>
 
     <div class="bg-white overflow-hidden shadow-sm rounded-lg">
@@ -41,7 +41,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                            {{ $post->category == 'berita' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
+                            {{ $post->category == 'berita' ? 'bg-emerald-100 text-emerald-800' : 'bg-yellow-100 text-yellow-800' }}">
                             {{ ucfirst($post->category) }}
                         </span>
                     </td>

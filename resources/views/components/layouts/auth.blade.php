@@ -11,6 +11,7 @@
 
     <div class="w-full max-w-md">
         <div class="text-center mb-6">
+            <img src="storage/logo.png" alt="Logo" class="mx-auto h-12 w-12 mb-4">
             <h1 class="text-3xl font-bold text-pesantren-dark">Mathali'ul Anwar</h1>
             <p class="text-gray-500 mt-2">Masuk ke Panel Admin</p>
         </div>

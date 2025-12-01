@@ -33,7 +33,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Gambar Utama (Opsional)</label>
-                <input wire:model="image" type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pesantren-50 file:text-pesantren-700 hover:file:bg-pesantren-100">
+                <input wire:model="image" type="file" class="mt-1 block w-full text-sm rounded-full border border-gray-300 text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-pesantren-700 hover:file:bg-gray-300">
                 
                 @if ($image)
                     <div class="mt-2">
@@ -44,14 +44,15 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Isi Konten</label>
-                <textarea wire:model="content" rows="10" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pesantren-primary focus:ring-pesantren-primary border p-2"></textarea>
-                <p class="text-xs text-gray-500 mt-1">*Tips: Nanti kita bisa pasang Text Editor canggih di sini.</p>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Isi Konten</label>
+                
+                <x-input.rich-text wire:model="content" :value="$content" />
+                
                 @error('content') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="flex justify-end">
-                <button type="submit" class="bg-pesantren-primary text-white px-6 py-2 rounded-lg hover:bg-pesantren-hover transition font-medium shadow-md border border-blue-500 bg-blue-500 hover:shadow-lg hover:bg-blue-600">
+                <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition font-medium shadow-md border border-emerald-500 hover:shadow-lg flex justify-center">
                     <span wire:loading.remove>Simpan Berita</span>
                     <span wire:loading>Menyimpan...</span>
                 </button>
