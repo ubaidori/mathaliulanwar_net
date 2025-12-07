@@ -41,7 +41,49 @@
         <div class="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
 
             <div x-show="activeTab === 'pribadi'" class="space-y-4">
+
                 <h3 class="font-bold text-gray-800-b pb-2 mb-4">Informasi Dasar</h3>
+
+                <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col md:flex-row gap-6 items-start">
+                    
+                    <div class="shrink-0">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pas Foto</label>
+                        
+                        @if ($photo)
+                            <div class="relative">
+                                <img src="{{ $photo->temporaryUrl() }}" class="w-32 h-44 object-cover rounded-lg shadow-sm border border-gray-300">
+                                <button type="button" wire:click="$set('photo', null)" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow hover:bg-red-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                        @else
+                            <div class="w-32 h-44 bg-gray-200 rounded-lg border-2 border-dashed border-gray-400 flex flex-col items-center justify-center text-gray-500">
+                                <svg class="w-10 h-10 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-semibold">Upload</span>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload File</label>
+                        <input wire:model="photo" type="file" accept="image/*" 
+                            class="block w-full text-sm text-gray-500 border border-gray-300 rounded-full file:mr-4 file:py-2 file:px-4 file:rounded-l-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-400 file:cursor-pointer cursor-pointer">
+                        @error('photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+
+                        <div class="mt-4 p-3 bg-blue-50 text-blue-800 text-sm rounded border border-blue-100 flex items-start gap-2">
+                            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div>
+                                <strong>Ketentuan Foto:</strong>
+                                <ul class="list-disc ml-4 mt-1 text-xs space-y-1">
+                                    <li>Rasio foto wajib <strong>3:4 (Portrait)</strong> agar tampilan rapi.</li>
+                                    <li>Latar belakang (background) polos (Merah/Biru/Putih).</li>
+                                    <li>Format file: JPG, JPEG, atau PNG.</li>
+                                    <li>Ukuran maksimal file: 2 MB.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>

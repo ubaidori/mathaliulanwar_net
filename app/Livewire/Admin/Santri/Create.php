@@ -6,9 +6,14 @@ use Livewire\Component;
 use App\Models\Santri;
 use App\Models\Dorm;
 use App\Models\IslamicClass;
+use Livewire\WithFileUploads;
 
 class Create extends Component
 {
+    use WithFileUploads; //Upload Foto
+    public $photo; // Properti untuk menyimpan foto
+
+
     // --- 1. DATA PRIBADI ---
     public $nis, $nisn, $name, $gender = 'L', $address, $dob;
     public $th_child, $siblings_count, $education;
@@ -34,6 +39,7 @@ class Create extends Component
         'gender' => 'required',
         'registration_date' => 'required|date',
         'nis' => 'nullable|unique:santris,nis',
+        'photo' => 'nullable|image|max:2048',
         // Validasi lain bisa ditambahkan sesuai kebutuhan
     ];
 
@@ -41,8 +47,16 @@ class Create extends Component
     {
         $this->validate();
 
+        // 4. Logika Simpan Foto
+        $photoPath = null;
+        if ($this->photo) {
+            // Simpan di folder 'santri-photos' di dalam storage public
+            $photoPath = $this->photo->store('santri-photos', 'public');
+        }
+
         Santri::create([
             // Data Pribadi
+            'photo' => $photoPath, // Simpan path foto
             'nis' => $this->nis,
             'nisn' => $this->nisn,
             'name' => $this->name,

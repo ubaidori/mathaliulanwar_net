@@ -38,6 +38,46 @@
         <div class="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
 
             <div x-show="activeTab === 'pribadi'" class="space-y-4">
+
+                <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col md:flex-row gap-6 items-start">
+                    
+                    <div class="shrink-0">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pas Foto</label>
+                        
+                        <div class="relative">
+                            @if ($photo)
+                                <img src="{{ $photo->temporaryUrl() }}" class="w-32 h-44 object-cover rounded-lg shadow-sm border border-gray-300">
+                                <span class="absolute bottom-0 left-0 right-0 bg-blue-500 text-white text-xs text-center py-1 rounded-b-lg">Preview Baru</span>
+                            
+                            @elseif ($old_photo)
+                                <img src="{{ asset('storage/' . $old_photo) }}" class="w-32 h-44 object-cover rounded-lg shadow-sm border border-gray-300">
+                                <span class="absolute bottom-0 left-0 right-0 bg-gray-500 text-white text-xs text-center py-1 rounded-b-lg">Foto Saat Ini</span>
+                            
+                            @else
+                                <div class="w-32 h-44 bg-gray-200 rounded-lg border-2 border-dashed border-gray-400 flex flex-col items-center justify-center text-gray-500">
+                                    <span class="text-xs">Tidak ada foto</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Ganti Foto (Opsional)</label>
+                        <input wire:model="photo" type="file" accept="image/*" 
+                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 border border-gray-300 rounded-full file:rounded-l-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-400 file:cursor-pointer cursor-pointer">
+                        <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika tidak ingin mengubah foto.</p>
+                        @error('photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+
+                        <div class="mt-4 p-3 bg-blue-50 text-blue-800 text-sm rounded border border-blue-100">
+                            <strong>Ketentuan Foto:</strong>
+                            <ul class="list-disc ml-4 mt-1 text-xs space-y-1">
+                                <li>Rasio <strong>3:4 (Portrait)</strong>.</li>
+                                <li>Maksimal 2MB.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">NIS</label>

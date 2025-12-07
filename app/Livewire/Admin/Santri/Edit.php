@@ -6,9 +6,16 @@ use Livewire\Component;
 use App\Models\Santri;
 use App\Models\Dorm;
 use App\Models\IslamicClass;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Edit extends Component
 {
+    use WithFileUploads; //Upload Foto
+
+    public $photo;
+    public $old_photo; // Menyimpan path foto lama jika ada
+
     public $santriId;
 
     // --- Properti sama persis dengan Create ---
@@ -29,6 +36,7 @@ class Edit extends Component
         $this->santriId = $santri->id;
 
         // Isi properti dengan data dari database
+        $this->old_photo = $santri->photo; // Simpan path foto lama
         $this->nis = $santri->nis;
         $this->nisn = $santri->nisn;
         $this->name = $santri->name;
@@ -105,6 +113,26 @@ class Edit extends Component
             'guardian_name' => $this->guardian_name,
             'guardian_relationship' => $this->guardian_relationship,
             'guardian_phone' => $this->guardian_phone,
+
+            'photo' => 'nullable|image|max:2048',
+        ]);
+
+        $santri = Santri::findOrFail($this->santriId);
+        $photoPath = $santri->photo; // Default pakai foto lama
+
+        // Cek jika ada foto baru diupload
+        if ($this->photo) {
+            // 1. Hapus foto lama dari storage jika ada
+            if ($santri->photo && Storage::disk('public')->exists($santri->photo)) {
+                Storage::disk('public')->delete($santri->photo);
+            }
+            // 2. Simpan foto baru
+            $photoPath = $this->photo->store('santri-photos', 'public');
+        }
+
+        $santri->update([
+            'photo' => $photoPath,
+            // ... update field lain ...
         ]);
 
         session()->flash('message', 'Data santri berhasil diperbarui.');

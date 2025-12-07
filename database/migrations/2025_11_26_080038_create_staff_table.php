@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('nip')->nullable(); // Nomor Induk (Opsional)
-            $table->string('position'); // Jabatan (Misal: Kepala Sekolah, Guru Fiqih)
-            $table->string('photo')->nullable();
-            $table->integer('sort_order')->default(0); // Untuk mengatur urutan tampilan
+            $table->string('name');           // Nama Lengkap + Gelar
+            $table->string('nip')->nullable(); // NIP / NIY (Nomor Induk Yayasan)
+            $table->string('position');       // Jabatan (Kepala Sekolah, Guru Mapel, Bendahara)
+            $table->string('phone')->nullable(); // No HP (Opsional)
+            $table->string('photo')->nullable(); // Foto Profil
+            $table->boolean('is_active')->default(true); // Status Aktif/Tidak
             $table->timestamps();
         });
     }

@@ -25,7 +25,7 @@
                     Profil
                     </a>
 
-                    <a href="{{ route('public.berita.index') }}" class="hover:text-pesantren-primary font-medium transition">Berita</a>
+                    <a href="{{ route('admin.posts.index') }}" class="hover:text-pesantren-primary font-medium transition">Berita</a>
                     
                     <a href="{{ route('public.contact') }}" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition shadow-sm font-medium">
                         Kontak
