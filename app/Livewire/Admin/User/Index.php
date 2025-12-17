@@ -23,6 +23,12 @@ class Index extends Component
         $this->editId = null;
     }
 
+    public function create()
+    {
+        $this->resetInput(); // Reset form
+        $this->dispatch('open-modal'); // Kirim sinyal ke frontend untuk buka modal
+    }
+
     public function store()
     {
         $this->validate([
@@ -53,6 +59,7 @@ class Index extends Component
         $this->email = $user->email;
         $this->role = $user->roles->first()->name ?? ''; // Ambil role lama
         $this->isEdit = true;
+        $this->dispatch('open-modal'); // Buka modal saat edit
     }
 
     public function update()
@@ -75,6 +82,7 @@ class Index extends Component
             $data['password'] = Hash::make($this->password);
         }
 
+        $this->dispatch('close-modal'); // Tutup modal setelah update
         $user->update($data);
         $user->syncRoles($this->role); // Update Role
 

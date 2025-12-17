@@ -60,7 +60,8 @@ class Create extends Component
                 [
                     'status' => $status,
                     'note' => $this->notes[$santriId] ?? null,
-                    'user_id' => auth()->user->check() ? auth()->user->id() : null,
+                    'user_id' => auth()->id(),
+                    // 'user_id' => auth()->user->check() ? auth()->user->id() : null,
                 ]
             );
         }

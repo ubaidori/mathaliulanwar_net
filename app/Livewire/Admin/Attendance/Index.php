@@ -31,13 +31,33 @@ class Index extends Component
         ];
         $todayName = $daysMap[$dayEnglish];
 
-        // 2. Ambil Jadwal Sesuai Hari & Tahun Aktif
+        $user = auth()->user();
         $schedules = [];
+
         if ($this->activeYear) {
-            $schedules = Schedule::where('academic_year_id', $this->activeYear->id)
-                        ->where('day', $todayName)
-                        ->orderBy('start_time')
-                        ->get();
+            $query = Schedule::where('academic_year_id', $this->activeYear->id)
+                        ->where('day', $todayName);
+
+            // LOGIC FILTER ROLE
+            // Jika dia Guru, filter jadwal berdasarkan ID Staff dia
+            if ($user->hasRole('guru')) {
+                // Cek apakah user ini terhubung ke data staff?
+                if ($user->staff) {
+                    $query->where('staff_id', $user->staff->id);
+                } else {
+                    // User punya role guru tapi belum di-link ke data staff
+                    // Kosongkan jadwal atau beri notifikasi
+                    $schedules = []; 
+                    return view('livewire.admin.attendance.index', [
+                        'schedules' => $schedules, 
+                        'todayName' => $todayName,
+                        'error' => 'Akun Anda belum terhubung dengan Data Guru. Hubungi Admin.'
+                    ]);
+                }
+            }
+            // Jika Super Admin / Akademik, biarkan melihat semua (tidak ada where staff_id)
+
+            $schedules = $query->orderBy('start_time')->get();
         }
 
         return view('livewire.admin.attendance.index', [

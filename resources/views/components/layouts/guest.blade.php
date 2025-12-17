@@ -27,8 +27,11 @@
 
                     <a href="{{ route('admin.posts.index') }}" class="hover:text-pesantren-primary font-medium transition">Berita</a>
                     
-                    <a href="{{ route('public.contact') }}" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition shadow-sm font-medium">
+                    <a href="{{ route('public.contact') }}" class="hover:text-pesantren-primary font-medium transition">
                         Kontak
+                    </a>
+                    <a href="{{ route('login') }}" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition shadow-sm font-medium">
+                        Login
                     </a>
 
                 </div>

@@ -9,4 +9,9 @@ class Staff extends Model
 {
     use HasFactory;
     protected $guarded = []; // Mengizinkan semua kolom diisi
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

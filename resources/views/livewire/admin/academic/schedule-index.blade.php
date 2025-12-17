@@ -16,7 +16,7 @@
         </div>
         
         <div class="flex gap-3 w-full md:w-auto">
-            <select wire:model.live="classFilter" class="border-gray-300 rounded-lg focus:ring-pesantren-500 w-full md:w-48">
+            <select wire:model.live="classFilter" class="border border-gray-300 rounded-lg focus:ring-emerald-500 w-full md:w-48">
                 <option value="">-- Pilih Kelas --</option>
                 @foreach($classes as $cls)
                     <option value="{{ $cls->id }}">{{ $cls->name }} {{ $cls->class }}{{ $cls->sub_class }}</option>
@@ -25,7 +25,7 @@
 
             <button wire:click="create" 
                 {{ !$classFilter || !$activeYear ? 'disabled' : '' }}
-                class="bg-pesantren-500 hover:bg-pesantren-600 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg shadow-lg shrink-0">
+                class="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg shadow-lg shrink-0 cursor-pointer">
                 + Jadwal
             </button>
         </div>
@@ -45,7 +45,7 @@
             
             @foreach($days as $day)
                 <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col h-full">
-                    <div class="bg-pesantren-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+                    <div class="bg-emerald-500 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
                         <h3 class="font-bold text-gray-800 uppercase">{{ $day }}</h3>
                         <span class="text-xs text-gray-500 bg-white px-2 py-1 rounded border">
                             {{ isset($schedulesGrouped[$day]) ? $schedulesGrouped[$day]->count() : 0 }} Mapel
@@ -74,8 +74,17 @@
                                         </td>
                                         <td class="px-2 py-3 text-right align-top">
                                             <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition">
-                                                <button wire:click="edit({{ $sch->id }})" class="text-blue-600 hover:text-blue-800 text-xs font-bold">Edit</button>
-                                                <button wire:click="delete({{ $sch->id }})" wire:confirm="Hapus?" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
+                                                <button wire:click="edit({{ $sch->id }})" class="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-100 transition duration-150">
+                                                    <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                    </svg>
+                                                </button>
+
+                                                <button wire:click="delete({{ $sch->id }})" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100 transition duration-150">
+                                                    <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -154,8 +163,8 @@
                 </div>
 
                 <div class="flex justify-end gap-2 mt-6">
-                    <button type="button" @click="showModal = false" class="px-4 py-2 text-gray-500">Batal</button>
-                    <button type="submit" class="bg-pesantren-500 text-white px-4 py-2 rounded-lg">Simpan</button>
+                    <button type="button" @click="showModal = false" class="px-4 py-2 border border-gray-300 bg-gray-300 hover:bg-gray-400 text-gray-500 rounded cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg cursor-pointer">Simpan</button>
                 </div>
             </form>
         </div>

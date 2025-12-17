@@ -7,7 +7,7 @@
             <h2 class="text-2xl font-bold text-gray-800">Data Guru & Staff</h2>
             <p class="text-sm text-gray-500">Manajemen pengajar dan pengurus pondok.</p>
         </div>
-        <button wire:click="create" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+        <button wire:click="create" class="bg-emerald-500 hover:bg-emerald-600 font-bold text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Tambah Staff
         </button>
@@ -64,8 +64,17 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 text-center space-x-2">
-                        <button wire:click="edit({{ $staff->id }})" class="text-blue-600 hover:text-blue-800 font-medium">Edit</button>
-                        <button wire:click="delete({{ $staff->id }})" wire:confirm="Hapus data ini?" class="text-red-500 hover:text-red-700 font-medium">Hapus</button>
+                        <button wire:click="edit({{ $staff->id }})" class="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-100 transition duration-150">
+                            <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </button>
+
+                        <button wire:click="delete({{ $staff->id }})" wire:confirm="Hapus data ini?" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100 transition duration-150">
+                            <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </td>
                 </tr>
                 @endforeach
@@ -93,6 +102,23 @@
                     <input wire:model="name" type="text" class="w-full rounded-lg border p-2 border-gray-300 focus:ring-pesantren-500">
                     @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
+
+                @if(!$isEdit) <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 my-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input wire:model.live="make_account" type="checkbox" class="rounded text-pesantren-500 focus:ring-pesantren-500">
+                        <span class="text-sm font-bold text-gray-700">Buatkan Akun Login (User)?</span>
+                    </label>
+                    
+                    @if($make_account)
+                        <div class="mt-3 animate-fade-in-down">
+                            <label class="block text-sm text-gray-600 mb-1">Email Login</label>
+                            <input wire:model="email" type="email" placeholder="guru@sekolah.com" class="w-full rounded-lg border-gray-300">
+                            @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <p class="text-xs text-gray-500 mt-1">Password default: <strong>password</strong></p>
+                        </div>
+                    @endif
+                </div>
+                @endif
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
