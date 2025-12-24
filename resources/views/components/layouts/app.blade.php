@@ -9,7 +9,8 @@
     
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
@@ -41,34 +42,89 @@
                 Dashboard
             </flux:sidebar.item>
             
-            
             @hasrole('super_admin')
             <flux:sidebar.item icon="users" href="{{ route('admin.users.index') }}">
                 User Management
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="inbox" badge="12" href="{{ route('admin.messages.index') }}">
+            <flux:sidebar.item icon="inbox" badge="<?php echo App\Models\Message::where('status', 0)->count(); ?>" href="{{ route('admin.messages.index') }}">
                 Inbox
             </flux:sidebar.item>
+
+            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
+                Website Management
+            </div>
 
             <flux:sidebar.item icon="document-text" href="{{ route('admin.pages.index') }}">
                 Profil Pesantren
             </flux:sidebar.item>
             @endhasrole
 
-            @hasrole('super_admin'|'admin_redaksi')
+            @hasanyrole('super_admin|admin_redaksi')
             <flux:sidebar.item icon="newspaper" href="{{ route('admin.posts.index') }}">
                 Berita & Mading
             </flux:sidebar.item>
-            @endhasrole
+            @endhasanyrole
 
-            @hasrole('super_admin'|'admin_akademik')
+            @hasanyrole('super_admin|admin_akademik')
+            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
+                Data Master
+            </div>
+
             <flux:sidebar.item icon="academic-cap" href="{{ route('admin.santri.index') }}">
-                Akademik
+                Data Santri
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="calendar" href="{{ route('admin.staff.index') }}">
+                Data Guru & Staff
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="folder-minus" href="{{ route('admin.dorms.index') }}">
+                Kamar
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="chart-bar" href="{{ route('admin.classes.index') }}">
+                Kelas Diniyah
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="calendar-days" href="{{ route('admin.academic.year') }}">
+                Tahun Ajaran
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="folder-minus" href="{{ route('admin.academic.subject') }}">
+                Mata Pelajaran
             </flux:sidebar.item>
             
-            @endhasrole
+            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
+                Absensi
+            </div>
+            
+            <flux:sidebar.item icon="clock" href="{{ route('admin.academic.schedule') }}">
+                Jadwal Pelajaran
+            </flux:sidebar.item>
 
+
+            @endhasanyrole
+
+            @hasanyrole('super_admin|admin_akademik|guru')
+            <flux:sidebar.item icon="book-open" href="{{ route('admin.attendance.index') }}">
+                Absensi Diniyah
+            </flux:sidebar.item>
+            @endhasanyrole
+
+            @hasanyrole('super_admin|admin_akademik')
+            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
+                Rekap Absensi
+            </div>
+            
+            <flux:sidebar.item icon="check-circle" href="{{ route('admin.attendance.report') }}">
+                Santri
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="check-circle" href="{{ route('admin.attendance.teacher_report') }}">
+                Guru
+            </flux:sidebar.item>
+            @endhasanyrole
 
             {{-- <flux:sidebar.item icon="document-text" href="#">Documents</flux:sidebar.item>
             <flux:sidebar.item icon="calendar" href="#">Calendar</flux:sidebar.item>
@@ -88,10 +144,18 @@
             <flux:menu>
                 <flux:menu.radio.group>
                     <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                    <flux:menu.radio>Truly Delta</flux:menu.radio>
+                    {{-- <flux:menu.radio>Truly Delta</flux:menu.radio> --}}
                 </flux:menu.radio.group>
                 <flux:menu.separator />
-                <flux:menu.item icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
+                
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 rounded-lg hover:text-gray-100 transition-colors">
+                        Logout
+                    </button>
+                </form>
+                {{-- <flux:menu.item>
+                </flux:menu.item> --}}
             </flux:menu>
         </flux:dropdown>
     </flux:sidebar>
@@ -103,10 +167,17 @@
             <flux:menu>
                 <flux:menu.radio.group>
                     <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                    <flux:menu.radio>Truly Delta</flux:menu.radio>
+                    {{-- <flux:menu.radio>Truly Delta</flux:menu.radio> --}}
                 </flux:menu.radio.group>
                 <flux:menu.separator />
-                <flux:menu.item icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-100 transition-colors">
+                        Logout
+                    </button>
+                </form>
+                {{-- <flux:menu.item> 
+                </flux:menu.item> --}}
             </flux:menu>
         </flux:dropdown>
     </flux:header>

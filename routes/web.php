@@ -6,6 +6,7 @@ use App\Livewire\Admin\Dashboard;
 use App\Livewire\Auth\Login;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Public\Profil;
+use App\Livewire\Admin\Attendance\TeacherReport;
 use App\Livewire\Admin\User\Index as UserIndex;
 use App\Livewire\Admin\Santri\Index as SantriIndex;
 use App\Livewire\Public\Berita\Index as BeritaIndex;
@@ -71,6 +72,7 @@ Route::middleware(['auth', 'role:super_admin|admin_akademik'])->prefix('admin')-
     // Jadwal Pelajaran juga masuk sini (untuk setup)
     Route::get('/jadwal-pelajaran', App\Livewire\Admin\Academic\ScheduleIndex::class)->name('admin.academic.schedule');
     Route::get('/laporan-absensi', App\Livewire\Admin\Attendance\Report::class)->name('admin.attendance.report');
+    Route::get('/laporan-guru', TeacherReport::class)->name('admin.attendance.teacher_report');
 });
 
 // --- GROUP 4: SUPER ADMIN, AKADEMIK, & GURU (Aktivitas Harian) ---

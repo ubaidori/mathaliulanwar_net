@@ -26,6 +26,7 @@
                         <th class="px-6 py-4">Kontak</th>
                         <th class="px-6 py-4 w-1/3">Isi Pesan</th>
                         <th class="px-6 py-4">Tanggal</th>
+                        <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -57,8 +58,21 @@
                             {{ $msg->created_at->format('H:i') }}
                         </td>
 
+                        <td>
+                            @if ($msg->status == 1)
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Terbaca</span>
+                                @else
+                                <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full">Belum Terbaca</span>
+                            @endif
+                        </td>
+
                         <td class="px-6 py-4 text-center">
                             <div class="flex items-center justify-center gap-3">
+                                <a href="" wire:click.prevent="markAsRead({{ $msg->id }})"
+                                   class="text-blue-600 hover:text-blue-800" title="Tandai sebagai Terbaca">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </a>
+                                
                                 @if($msg->phone)
                                 <a href="https://wa.me/{{ preg_replace('/^0/', '62', $msg->phone) }}" target="_blank" 
                                    class="text-green-600 hover:text-green-800" title="Balas via WA">

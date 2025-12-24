@@ -20,7 +20,6 @@
         trix-editor blockquote { border-left: 4px solid #ccc !important; padding-left: 1rem !important; font-style: italic; }
         .trix-content { min-height: 300px; }
     </style>
-    @fluxAppearance
 </head>
 
 {{-- ----------------------------------------------------------------------------------- --}}

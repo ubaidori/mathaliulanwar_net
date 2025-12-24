@@ -19,11 +19,21 @@ class Index extends Component
         }
     }
 
+    public function markAsRead($id)
+    {
+        $pesan = Message::find($id);
+        if($pesan && $pesan->status == 0) {
+            $pesan->status = 1; // Tandai sebagai terbaca
+            $pesan->save();
+            session()->flash('message', 'Pesan ditandai sebagai terbaca.');
+        }
+    }
+
     public function render()
     {
         // Ambil data pesan, urutkan dari yang terbaru
         return view('livewire.admin.pesan.index', [
-            'messages' => Message::latest()->paginate(10)
+            'messages' => Message::latest()->paginate(10),
         ]);
     }
 }
