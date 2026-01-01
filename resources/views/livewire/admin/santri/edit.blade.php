@@ -1,188 +1,264 @@
-<div class="max-w-5xl mx-auto" x-data="{ activeTab: 'pribadi' }">
+<div class="max-w-5xl mx-auto py-8 px-4 sm:px-6" x-data="{ activeTab: 'pribadi' }">
     
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Edit Data Santri</h2>
-            <p class="text-sm text-gray-500">Perbarui informasi santri.</p>
+            <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Edit Data Santri</h1>
+            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                Memperbarui informasi santri: <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ $name }}</span>
+            </p>
         </div>
-        <a href="{{ route('admin.santri.index') }}" class="text-gray-600 hover:text-gray-900">
-            &larr; Kembali
+        
+        <a href="{{ route('admin.santri.index') }}" class="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition">
+            <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Kembali
         </a>
     </div>
 
     <form wire:submit="update">
         
-        <div class="flex flex-wrap gap-2 mb-6 border-b border-gray-200 pb-1">
-            <button type="button" @click="activeTab = 'pribadi'"
-                :class="activeTab === 'pribadi' ? 'border-pesantren-500 text-pesantren-600 bg-pesantren-50' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="px-4 py-2 border-b-2 font-medium text-sm transition rounded-t-lg">
-                Data Pribadi
-            </button>
-            <button type="button" @click="activeTab = 'ortu'"
-                :class="activeTab === 'ortu' ? 'border-pesantren-500 text-pesantren-600 bg-pesantren-50' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="px-4 py-2 border-b-2 font-medium text-sm transition rounded-t-lg">
-                Orang Tua
-            </button>
-            <button type="button" @click="activeTab = 'wali'"
-                :class="activeTab === 'wali' ? 'border-pesantren-500 text-pesantren-600 bg-pesantren-50' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="px-4 py-2 border-b-2 font-medium text-sm transition rounded-t-lg">
-                Wali Santri
-            </button>
-            <button type="button" @click="activeTab = 'akademik'"
-                :class="activeTab === 'akademik' ? 'border-pesantren-500 text-pesantren-600 bg-pesantren-50' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                class="px-4 py-2 border-b-2 font-medium text-sm transition rounded-t-lg">
-                Pondok & Mutasi
-            </button>
+        <div class="mb-6 border-b border-zinc-200 dark:border-zinc-800">
+            <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+                <button type="button" @click="activeTab = 'pribadi'"
+                    :class="activeTab === 'pribadi' 
+                        ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' 
+                        : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    Data Pribadi
+                </button>
+
+                <button type="button" @click="activeTab = 'ortu'"
+                    :class="activeTab === 'ortu' 
+                        ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' 
+                        : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    Orang Tua
+                </button>
+
+                <button type="button" @click="activeTab = 'wali'"
+                    :class="activeTab === 'wali' 
+                        ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' 
+                        : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    Wali Santri
+                </button>
+
+                <button type="button" @click="activeTab = 'akademik'"
+                    :class="activeTab === 'akademik' 
+                        ? 'border-zinc-900 text-zinc-900 dark:border-white dark:text-white' 
+                        : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    Pondok & Status
+                </button>
+            </nav>
         </div>
 
-        <div class="bg-white shadow-sm rounded-lg p-6 border border-gray-200">
+        <x-card class="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 min-h-[400px]">
 
-            <div x-show="activeTab === 'pribadi'" class="space-y-4">
+            <div x-show="activeTab === 'pribadi'" class="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
 
-                <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col md:flex-row gap-6 items-start">
-                    
-                    <div class="shrink-0">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pas Foto</label>
-                        
-                        <div class="relative">
+                <div class="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col md:flex-row gap-6">
+                    <div class="shrink-0 flex justify-center md:justify-start">
+                        <div class="relative group">
                             @if ($photo)
-                                <img src="{{ $photo->temporaryUrl() }}" class="w-32 h-44 object-cover rounded-lg shadow-sm border border-gray-300">
-                                <span class="absolute bottom-0 left-0 right-0 bg-blue-500 text-white text-xs text-center py-1 rounded-b-lg">Preview Baru</span>
+                                {{-- Case: Ada Upload Baru --}}
+                                <img src="{{ $photo->temporaryUrl() }}" class="w-32 h-40 object-cover rounded-lg shadow-sm border border-indigo-200 dark:border-indigo-700">
+                                <span class="absolute inset-x-0 bottom-0 bg-indigo-600 text-white text-[10px] uppercase font-bold text-center py-1 rounded-b-lg opacity-90">Preview Baru</span>
                             
                             @elseif ($old_photo)
-                                <img src="{{ asset('storage/' . $old_photo) }}" class="w-32 h-44 object-cover rounded-lg shadow-sm border border-gray-300">
-                                <span class="absolute bottom-0 left-0 right-0 bg-gray-500 text-white text-xs text-center py-1 rounded-b-lg">Foto Saat Ini</span>
+                                {{-- Case: Foto Lama Ada --}}
+                                <img src="{{ asset('storage/' . $old_photo) }}" class="w-32 h-40 object-cover rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-600">
+                                <span class="absolute inset-x-0 bottom-0 bg-zinc-800/80 text-white text-[10px] uppercase font-bold text-center py-1 rounded-b-lg">Foto Saat Ini</span>
                             
                             @else
-                                <div class="w-32 h-44 bg-gray-200 rounded-lg border-2 border-dashed border-gray-400 flex flex-col items-center justify-center text-gray-500">
-                                    <span class="text-xs">Tidak ada foto</span>
+                                {{-- Case: Kosong --}}
+                                <div class="w-32 h-40 bg-zinc-200 dark:bg-zinc-800 rounded-lg border-2 border-dashed border-zinc-300 dark:border-zinc-600 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500">
+                                    <svg class="w-8 h-8 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span class="text-xs">No Photo</span>
                                 </div>
                             @endif
                         </div>
                     </div>
 
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Ganti Foto (Opsional)</label>
-                        <input wire:model="photo" type="file" accept="image/*" 
-                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 border border-gray-300 rounded-full file:rounded-l-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-400 file:cursor-pointer cursor-pointer">
-                        <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika tidak ingin mengubah foto.</p>
-                        @error('photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-
-                        <div class="mt-4 p-3 bg-blue-50 text-blue-800 text-sm rounded border border-blue-100">
-                            <strong>Ketentuan Foto:</strong>
-                            <ul class="list-disc ml-4 mt-1 text-xs space-y-1">
-                                <li>Rasio <strong>3:4 (Portrait)</strong>.</li>
-                                <li>Maksimal 2MB.</li>
-                            </ul>
+                    <div class="flex-1 space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Ganti Foto (Opsional)</label>
+                            <input wire:model="photo" type="file" accept="image/*" 
+                                class="block w-full text-sm text-zinc-500 dark:text-zinc-400
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-zinc-900 file:text-white
+                                hover:file:bg-zinc-700
+                                dark:file:bg-zinc-100 dark:file:text-zinc-900
+                                cursor-pointer">
+                            <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Biarkan kosong jika tidak ingin mengubah foto profil.</p>
+                            @error('photo') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">NIS</label>
-                        <input wire:model="nis" type="number" class="w-full rounded-lg border border-gray-300 focus:ring-pesantren-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">NIS</label>
+                        <input wire:model="nis" type="number" class="input-flux">
+                        @error('nis') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                        <input wire:model="name" type="text" class="w-full rounded-lg border border-gray-300 focus:ring-pesantren-500">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Nama Lengkap</label>
+                        <input wire:model="name" type="text" class="input-flux">
+                        @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Gender</label>
-                        <select wire:model="gender" class="w-full rounded-lg border border-gray-300">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Jenis Kelamin</label>
+                        <select wire:model="gender" class="input-flux">
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                        <input wire:model="dob" type="date" class="w-full rounded-lg border border-gray-300">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Tanggal Lahir</label>
+                        <input wire:model="dob" type="date" class="input-flux">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Alamat</label>
-                    <textarea wire:model="address" rows="2" class="w-full rounded-lg border border-gray-300"></textarea>
+
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Alamat Lengkap</label>
+                    <textarea wire:model="address" rows="3" class="input-flux"></textarea>
                 </div>
             </div>
 
-            <div x-show="activeTab === 'ortu'" style="display: none;" class="space-y-6">
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <h4 class="font-bold text-gray-800 mb-3">Data Ayah</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input wire:model="father_name" placeholder="Nama Ayah" type="text" class="w-full rounded-lg border border-gray-300">
-                        <input wire:model="father_phone" placeholder="No HP Ayah" type="text" class="w-full rounded-lg border border-gray-300">
-                    </div>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <h4 class="font-bold text-gray-800 mb-3">Data Ibu</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input wire:model="mother_name" placeholder="Nama Ibu" type="text" class="w-full rounded-lg border border-gray-300">
-                        <input wire:model="mother_phone" placeholder="No HP Ibu" type="text" class="w-full rounded-lg border border-gray-300">
-                    </div>
-                </div>
-            </div>
-
-            <div x-show="activeTab === 'wali'" style="display: none;">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Wali</label>
-                        <input wire:model="guardian_name" type="text" class="w-full rounded-lg border border-gray-300">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Hubungan</label>
-                        <input wire:model="guardian_relationship" type="text" class="w-full rounded-lg border border-gray-300">
-                    </div>
-                </div>
-            </div>
-
-            <div x-show="activeTab === 'akademik'" style="display: none;" class="space-y-6">
+            <div x-show="activeTab === 'ortu'" class="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300" style="display: none;">
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Asrama</label>
-                        <select wire:model="dorm_id" class="w-full rounded-lg border border-gray-300">
-                            <option value="">-- Pilih --</option>
-                            @foreach($dorms as $d)
-                                <option value="{{ $d->id }}">{{ $d->block }} - {{ $d->room_number }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                        <select wire:model="islamic_class_id" class="w-full rounded-lg border border-gray-300">
-                            <option value="">-- Pilih --</option>
-                            @foreach($classes as $c)
-                                <option value="{{ $c->id }}">{{ $c->name }} {{ $c->class }}{{ $c->sub_class }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="border-t border-gray-200 pt-4 mt-4">
-                    <h4 class="text-red-600 font-bold mb-2 text-sm uppercase">Status Kelulusan / Boyong</h4>
-                    <div class="grid grid-cols-2 gap-4 bg-red-50 p-4 rounded-lg border border-red-100">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Tanggal Keluar (Boyong)</label>
-                            <input wire:model="drop_date" type="date" class="w-full rounded-lg border-gray-300">
-                            <p class="text-xs text-gray-500 mt-1">Isi hanya jika santri sudah tidak aktif.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-700 pb-2">
+                            <span class="text-blue-500">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </span>
+                            Data Ayah
+                        </h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs font-medium text-zinc-500 uppercase">Nama Ayah</label>
+                                <input wire:model="father_name" type="text" class="input-flux">
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-zinc-500 uppercase">No. Handphone</label>
+                                <input wire:model="father_phone" type="text" class="input-flux">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Alasan Keluar</label>
-                            <input wire:model="drop_reason" type="text" placeholder="Misal: Lulus / Pindah" class="w-full rounded-lg border border-gray-300">
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-700 pb-2">
+                            <span class="text-pink-500">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </span>
+                            Data Ibu
+                        </h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs font-medium text-zinc-500 uppercase">Nama Ibu</label>
+                                <input wire:model="mother_name" type="text" class="input-flux">
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-zinc-500 uppercase">No. Handphone</label>
+                                <input wire:model="mother_phone" type="text" class="input-flux">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
+            <div x-show="activeTab === 'wali'" class="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300" style="display: none;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Nama Wali</label>
+                        <input wire:model="guardian_name" type="text" class="input-flux">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Hubungan dengan Santri</label>
+                        <input wire:model="guardian_relationship" type="text" placeholder="Contoh: Paman, Kakek" class="input-flux">
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="activeTab === 'akademik'" class="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300" style="display: none;">
+                
+                <div class="space-y-6">
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Penempatan Saat Ini</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Asrama</label>
+                            <select wire:model="dorm_id" class="input-flux">
+                                <option value="">-- Pilih Asrama --</option>
+                                @foreach($dorms as $d)
+                                    <option value="{{ $d->id }}">Blok {{ $d->block }} - {{ $d->room_number }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Kelas Diniyah</label>
+                            <select wire:model="islamic_class_id" class="input-flux">
+                                <option value="">-- Pilih Kelas --</option>
+                                @foreach($classes as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }} {{ $c->class }}{{ $c->sub_class }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-zinc-200 dark:border-zinc-700"></div>
+
+                <div class="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-xl p-6">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg shrink-0">
+                            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-red-800 dark:text-red-300">Status Kelulusan / Boyong</h4>
+                            <p class="text-sm text-red-600 dark:text-red-400 mt-1">
+                                Isi bagian ini <strong>HANYA JIKA</strong> santri telah lulus, pindah, atau berhenti (Non-Aktif).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-red-800 dark:text-red-300">Tanggal Keluar (Boyong)</label>
+                            <input wire:model="drop_date" type="date" class="block w-full rounded-lg border-red-200 dark:border-red-900 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm py-2.5 px-3">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-red-800 dark:text-red-300">Alasan Keluar</label>
+                            <input wire:model="drop_reason" type="text" placeholder="Misal: Lulus, Pindah Sekolah, Sakit" class="block w-full rounded-lg border-red-200 dark:border-red-900 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm py-2.5 px-3">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </x-card>
 
         <div class="mt-6 flex justify-end">
-            <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg">
-                Simpan Perubahan
+            <button type="submit" class="inline-flex items-center justify-center px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-sm rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition shadow-lg gap-2">
+                <span wire:loading.remove>Simpan Perubahan</span>
+                <span wire:loading class="flex items-center gap-2">
+                    <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Menyimpan...
+                </span>
             </button>
         </div>
 
     </form>
+
+    {{-- CSS Helpers --}}
+    <style>
+        .input-flux {
+            @apply block w-full rounded-lg border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5 px-3 transition duration-150;
+        }
+    </style>
 </div>

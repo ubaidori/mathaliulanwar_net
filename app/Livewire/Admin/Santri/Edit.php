@@ -48,7 +48,7 @@ class Edit extends Component
         $this->siblings_count = $santri->siblings_count;
         $this->education = $santri->education;
 
-        $this->registration_date = $santri->registration_date ? $santri->registration_date->format('Y-m-d') : null;
+        $this->registration_date = $santri->registration_date ? date('d M Y', strtotime($santri->registration_date)) : null;
         $this->drop_date = $santri->drop_date ? $santri->drop_date->format('Y-m-d') : null;
         $this->drop_reason = $santri->drop_reason;
         $this->dorm_id = $santri->dorm_id;

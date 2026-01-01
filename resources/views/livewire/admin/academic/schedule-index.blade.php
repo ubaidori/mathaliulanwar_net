@@ -1,99 +1,115 @@
-<div x-data="{ showModal: false }" 
-     x-on:open-modal.window="showModal = true" 
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6" 
+     x-data="{ showModal: false }"
+     x-on:open-modal.window="showModal = true"
      x-on:close-modal.window="showModal = false">
     
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Jadwal Pelajaran</h2>
-            <div class="text-sm text-gray-500 flex items-center gap-2">
-                <span>Tahun Ajaran Aktif:</span>
+            <div class="flex items-center gap-3">
+                <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Jadwal Pelajaran</h1>
                 @if($activeYear)
-                    <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{{ $activeYear->name }} ({{ $activeYear->semester }})</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        {{ $activeYear->name }} - {{ $activeYear->semester }}
+                    </span>
                 @else
-                    <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">Belum diset!</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800">
+                        Tahun Ajaran Belum Diset
+                    </span>
                 @endif
             </div>
+            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Pilih kelas terlebih dahulu untuk mengelola jadwal mingguan.</p>
         </div>
         
-        <div class="flex gap-3 w-full md:w-auto">
-            <select wire:model.live="classFilter" class="border border-gray-300 rounded-lg focus:ring-emerald-500 w-full md:w-48">
-                <option value="">-- Pilih Kelas --</option>
-                @foreach($classes as $cls)
-                    <option value="{{ $cls->id }}">{{ $cls->name }} {{ $cls->class }}{{ $cls->sub_class }}</option>
-                @endforeach
-            </select>
+        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto items-end">
+            <div class="w-full sm:w-64">
+                <label class="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">
+                    Pilih Kelas
+                </label>
+                <select wire:model.live="classFilter" class="input-flux cursor-pointer">
+                    <!-- <option value="">-- Pilih Kelas --</option> -->
+                    @foreach($classes as $cls)
+                        <option value="{{ $cls->id }}">{{ $cls->name }} - Kelas {{ $cls->class }}{{ $cls->sub_class }}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <button wire:click="create" 
-                {{ !$classFilter || !$activeYear ? 'disabled' : '' }}
-                class="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg shadow-lg shrink-0 cursor-pointer">
-                + Jadwal
+                    {{ !$classFilter || !$activeYear ? 'disabled' : '' }}
+                    class="h-[42px] inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed dark:disabled:bg-zinc-800 dark:disabled:text-zinc-600 text-white text-sm font-medium rounded-lg transition shadow-sm gap-2 whitespace-nowrap">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Buat Jadwal
             </button>
         </div>
     </div>
 
     @if (session()->has('message'))
-        <div class="bg-green-100 text-green-700 p-3 rounded mb-4">{{ session('message') }}</div>
+        <div class="mb-6 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 flex items-center gap-3">
+            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">{{ session('message') }}</span>
+        </div>
     @endif
     
     @if (session()->has('error'))
-        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">{{ session('error') }}</div>
+        <div class="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 flex items-center gap-3">
+            <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-sm font-medium text-red-800 dark:text-red-300">{{ session('error') }}</span>
+        </div>
     @endif
 
     @if($classFilter && $activeYear)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             @php $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad']; @endphp
             
             @foreach($days as $day)
-                <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col h-full">
-                    <div class="bg-emerald-500 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-                        <h3 class="font-bold text-gray-800 uppercase">{{ $day }}</h3>
-                        <span class="text-xs text-gray-500 bg-white px-2 py-1 rounded border">
-                            {{ isset($schedulesGrouped[$day]) ? $schedulesGrouped[$day]->count() : 0 }} Mapel
-                        </span>
+                <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800 flex flex-col h-full overflow-hidden hover:border-indigo-300 dark:hover:border-indigo-700 transition duration-300">
+                    <div class="px-5 py-3 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex justify-between items-center">
+                        <h3 class="font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wide text-sm">{{ $day }}</h3>
+                        @if(isset($schedulesGrouped[$day]) && $schedulesGrouped[$day]->count() > 0)
+                            <span class="inline-flex items-center justify-center h-5 min-w-[20px] px-1.5 text-xs font-medium rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                                {{ $schedulesGrouped[$day]->count() }} Mapel
+                            </span>
+                        @endif
                     </div>
 
-                    <div class="p-0 flex-1">
+                    <div class="flex-1 p-2">
                         @if(isset($schedulesGrouped[$day]))
-                            <table class="w-full text-left">
-                                <tbody class="divide-y divide-gray-100">
-                                    @foreach($schedulesGrouped[$day] as $sch)
-                                    <tr class="group hover:bg-gray-50 transition">
-                                        <td class="px-4 py-3 align-top">
-                                            <div class="text-sm font-bold text-gray-800">
-                                                {{ \Carbon\Carbon::parse($sch->start_time)->format('H:i') }} - 
-                                                {{ \Carbon\Carbon::parse($sch->end_time)->format('H:i') }}
-                                            </div>
-                                            <div class="text-xs text-gray-500 mt-1">{{ $sch->subject->code ?? '' }}</div>
-                                        </td>
-                                        <td class="px-4 py-3 align-top">
-                                            <div class="text-sm font-medium text-pesantren-700">{{ $sch->subject->name }}</div>
-                                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                                {{ $sch->staff->name }}
-                                            </div>
-                                        </td>
-                                        <td class="px-2 py-3 text-right align-top">
-                                            <div class="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition">
-                                                <button wire:click="edit({{ $sch->id }})" class="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-100 transition duration-150">
-                                                    <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                                    </svg>
-                                                </button>
+                            <ul class="space-y-1">
+                                @foreach($schedulesGrouped[$day] as $sch)
+                                <li class="group relative flex items-start gap-3 p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition duration-150 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700">
+                                    <div class="flex flex-col items-center justify-start pt-0.5 min-w-[3rem]">
+                                        <span class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                                            {{ \Carbon\Carbon::parse($sch->start_time)->format('H:i') }}
+                                        </span>
+                                        <div class="w-px h-2 bg-zinc-200 dark:bg-zinc-700 my-0.5"></div>
+                                        <span class="text-xs font-mono font-medium text-zinc-400">
+                                            {{ \Carbon\Carbon::parse($sch->end_time)->format('H:i') }}
+                                        </span>
+                                    </div>
 
-                                                <button wire:click="delete({{ $sch->id }})" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100 transition duration-150">
-                                                    <svg xmlns="www.w3.org" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    <div class="flex-1 min-w-0 border-l border-zinc-100 dark:border-zinc-700 pl-3">
+                                        <p class="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                                            {{ $sch->subject->name }}
+                                        </p>
+                                        <div class="flex items-center gap-1.5 mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                            <svg class="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                            <span class="truncate">{{ $sch->staff->name }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1 bg-white dark:bg-zinc-800 shadow-sm rounded-md border border-zinc-200 dark:border-zinc-700 p-0.5">
+                                        <button wire:click="edit({{ $sch->id }})" class="p-1.5 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 rounded transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                        </button>
+                                        <button wire:click="delete({{ $sch->id }})" wire:confirm="Hapus jadwal ini?" class="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/50 rounded transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
                         @else
-                            <div class="p-6 text-center text-gray-400 text-sm italic">
-                                Tidak ada jadwal (Libur)
+                            <div class="h-full min-h-[100px] flex flex-col items-center justify-center py-4 text-zinc-300 dark:text-zinc-700">
+                                <span class="text-xs font-medium italic">Libur / Kosong</span>
                             </div>
                         @endif
                     </div>
@@ -101,72 +117,107 @@
             @endforeach
         </div>
     @else
-        <div class="flex flex-col items-center justify-center py-20 bg-white rounded-lg border border-dashed border-gray-300 text-gray-500">
-            <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            <p class="text-lg font-medium">Silakan Pilih Kelas Terlebih Dahulu</p>
-            <p class="text-sm">Untuk melihat atau menambahkan jadwal pelajaran.</p>
+        <div class="flex flex-col items-center justify-center py-24 bg-white dark:bg-zinc-900 rounded-xl border-2 border-dashed border-zinc-200 dark:border-zinc-800">
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-full mb-4 animate-pulse">
+                <svg class="w-10 h-10 text-indigo-400 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Silakan Pilih Kelas</h3>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-2 max-w-sm text-center">
+                Pilih kelas melalui dropdown di atas untuk menampilkan, membuat, atau mengedit jadwal pelajaran.
+            </p>
         </div>
     @endif
 
-    <div x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white w-full max-w-lg rounded-xl shadow-2xl p-6 border border-gray-200">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">
-                {{ $isEdit ? 'Edit Jadwal' : 'Tambah Jadwal Baru' }}
-            </h3>
-            
-            <form wire:submit="{{ $isEdit ? 'update' : 'store' }}" class="space-y-4">
+    <div x-show="showModal" 
+         class="fixed inset-0 z-50 overflow-y-auto"
+         style="display: none;"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        
+        <div class="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm transition-opacity" @click="showModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg transform overflow-hidden rounded-xl bg-white dark:bg-zinc-900 p-6 text-left shadow-2xl transition-all border border-zinc-200 dark:border-zinc-800"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95">
                 
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="col-span-1">
-                        <label class="text-sm font-medium text-gray-700">Hari</label>
-                        <select wire:model="day" class="w-full rounded-lg border-gray-300 focus:ring-pesantren-500">
-                            <option value="Senin">Senin</option>
-                            <option value="Selasa">Selasa</option>
-                            <option value="Rabu">Rabu</option>
-                            <option value="Kamis">Kamis</option>
-                            <option value="Jumat">Jumat</option>
-                            <option value="Sabtu">Sabtu</option>
-                            <option value="Ahad">Ahad</option>
+                <h3 class="text-lg font-bold text-zinc-900 dark:text-white mb-6">
+                    {{ $isEdit ? 'Edit Jadwal' : 'Tambah Jadwal Baru' }}
+                </h3>
+                
+                <form wire:submit="{{ $isEdit ? 'update' : 'store' }}" class="space-y-5">
+                    
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 sm:col-span-4">
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Hari</label>
+                            <select wire:model="day" class="input-flux">
+                                <option value="Senin">Senin</option>
+                                <option value="Selasa">Selasa</option>
+                                <option value="Rabu">Rabu</option>
+                                <option value="Kamis">Kamis</option>
+                                <option value="Jumat">Jumat</option>
+                                <option value="Sabtu">Sabtu</option>
+                                <option value="Ahad">Ahad</option>
+                            </select>
+                        </div>
+                        <div class="col-span-6 sm:col-span-4">
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Mulai</label>
+                            <input wire:model="start_time" type="time" class="input-flux">
+                        </div>
+                        <div class="col-span-6 sm:col-span-4">
+                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Selesai</label>
+                            <input wire:model="end_time" type="time" class="input-flux">
+                            @error('end_time') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Mata Pelajaran</label>
+                        <select wire:model="subject_id" class="input-flux">
+                            <option value="">-- Pilih Mapel --</option>
+                            @foreach($subjects as $subj)
+                                <option value="{{ $subj->id }}">{{ $subj->name }} ({{ $subj->code ?? '-' }})</option>
+                            @endforeach
                         </select>
+                        @error('subject_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div class="col-span-1">
-                        <label class="text-sm font-medium text-gray-700">Jam Mulai</label>
-                        <input wire:model="start_time" type="time" class="w-full rounded-lg border-gray-300 focus:ring-pesantren-500">
+
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">Guru Pengampu</label>
+                        <select wire:model="staff_id" class="input-flux">
+                            <option value="">-- Pilih Guru --</option>
+                            @foreach($staffs as $staff)
+                                <option value="{{ $staff->id }}">{{ $staff->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('staff_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div class="col-span-1">
-                        <label class="text-sm font-medium text-gray-700">Jam Selesai</label>
-                        <input wire:model="end_time" type="time" class="w-full rounded-lg border-gray-300 focus:ring-pesantren-500">
-                        @error('end_time') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    <div class="flex justify-end gap-3 mt-8">
+                        <button type="button" @click="showModal = false" class="px-4 py-2 text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 text-sm font-medium transition">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-bold shadow-md transition flex items-center gap-2">
+                            <span wire:loading.remove>{{ $isEdit ? 'Simpan Perubahan' : 'Simpan Data' }}</span>
+                            <span wire:loading>Menyimpan...</span>
+                        </button>
                     </div>
-                </div>
-
-                <div>
-                    <label class="text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                    <select wire:model="subject_id" class="w-full rounded-lg border-gray-300 focus:ring-pesantren-500">
-                        <option value="">-- Pilih Mapel --</option>
-                        @foreach($subjects as $subj)
-                            <option value="{{ $subj->id }}">{{ $subj->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('subject_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label class="text-sm font-medium text-gray-700">Guru Pengampu</label>
-                    <select wire:model="staff_id" class="w-full rounded-lg border-gray-300 focus:ring-pesantren-500">
-                        <option value="">-- Pilih Guru --</option>
-                        @foreach($staffs as $staff)
-                            <option value="{{ $staff->id }}">{{ $staff->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('staff_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="flex justify-end gap-2 mt-6">
-                    <button type="button" @click="showModal = false" class="px-4 py-2 border border-gray-300 bg-gray-300 hover:bg-gray-400 text-gray-500 rounded cursor-pointer">Batal</button>
-                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg cursor-pointer">Simpan</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
+
+    <style>
+        .input-flux {
+            @apply block w-full rounded-lg border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5 px-3 transition duration-150;
+        }
+    </style>
 </div>

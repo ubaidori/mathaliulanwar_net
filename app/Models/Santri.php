@@ -9,18 +9,20 @@ class Santri extends Model
 {
     use HasFactory;
 
-    protected $guarded = []; // Mengizinkan semua kolom diisi
+    // 1. TAMBAHKAN $guarded ATAU $fillable AGAR IMPORT BISA MASUK
+    // Kita gunakan guarded = [] agar semua kolom boleh diisi via Excel
+    protected $guarded = ['id']; 
 
-    // Casting agar otomatis jadi objek Carbon (Tanggal)
-    protected $casts = [
-        'dob' => 'date',
-        'father_dob' => 'date',
-        'mother_dob' => 'date',
-        'guardian_dob' => 'date',
-        'registration_date' => 'date',
-        'drop_date' => 'date',
-    ];
+    // 2. TAMBAHKAN RELASI AGAR EXPORT TIDAK ERROR
+    public function dorm()
+    {
+        // Relasi ke tabel asrama
+        return $this->belongsTo(Dorm::class, 'dorm_id');
+    }
 
-    // Nanti tambahkan relasi ke Asrama/Kelas disini jika tabelnya sudah ada
-    // public function dorm() { return $this->belongsTo(Dorm::class); }
+    public function islamicClass()
+    {
+        // Relasi ke tabel kelas diniyah
+        return $this->belongsTo(IslamicClass::class, 'islamic_class_id');
+    }
 }

@@ -4,14 +4,20 @@ namespace App\Livewire\Admin\Santri;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use App\Models\Santri;
 use App\Models\Dorm;
 use App\Models\IslamicClass;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
+use App\Exports\SantriExport;
+use App\Imports\SantriImport;
+use Illuminate\Support\Facades\Storage;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     // 1. Properti Filter
     public $search = '';
@@ -19,6 +25,10 @@ class Index extends Component
     public $filterClass = '';
     public $filterGender = '';
     public $filterStatus = 'aktif'; // Default tampilkan yang aktif saja
+
+    // --- PROPERTY BARU UNTUK IMPORT ---
+    public $showImportModal = false;
+    public $importFile;
 
     // 2. Reset Halaman ke 1 saat filter berubah
     // Ini PENTING: Jika user di hal 5 lalu memfilter, harus kembali ke hal 1
@@ -34,6 +44,57 @@ class Index extends Component
         $this->reset(['search', 'filterDorm', 'filterClass', 'filterGender']);
         $this->filterStatus = 'aktif';
         $this->resetPage();
+    }
+
+    // --- FITUR EXPORT ---
+    public function export()
+    {
+        // Kirim semua filter saat ini ke Class Export
+        $filters = [
+            'search' => $this->search,
+            'dorm' => $this->filterDorm,
+            'class' => $this->filterClass,
+            'gender' => $this->filterGender,
+            'status' => $this->filterStatus,
+        ];
+
+        return Excel::download(new SantriExport($filters), 'data_santri_'.date('Y-m-d_H-i').'.xlsx');
+    }
+
+    // --- FITUR IMPORT ---
+    public function downloadTemplate()
+    {
+        // Cara simpel: Download file statis yang sudah disiapkan di folder public
+        // Pastikan Anda membuat file excel contoh di public/templates/template_santri.xlsx
+        return response()->download(public_path('templates/template_santri.xlsx'));
+    }
+
+    public function import()
+    {
+        $this->validate([
+            'importFile' => 'required|mimes:xlsx,xls|max:10240',
+        ]);
+
+        try {
+            Excel::import(new SantriImport, $this->importFile);
+            
+            $this->showImportModal = false;
+            $this->importFile = null;
+            session()->flash('message', 'Import data santri berhasil!');
+            
+        } catch (ValidationException $e) {
+            // Menangkap error validasi baris Excel (misal: Kolom Nama kosong di baris 2)
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris " . $failure->row() . ": " . implode(', ', $failure->errors());
+            }
+            session()->flash('error', implode('<br>', $errorMessages));
+            
+        } catch (\Exception $e) {
+            // Menangkap error umum (misal: Salah nama kolom)
+            session()->flash('error', 'Gagal: ' . $e->getMessage());
+        }
     }
 
     // 4. Fitur Hapus (Tetap ada)

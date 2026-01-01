@@ -25,8 +25,12 @@ class Index extends Component
 
     public function create()
     {
-        $this->resetInput(); // Reset form
-        $this->dispatch('open-modal'); // Kirim sinyal ke frontend untuk buka modal
+        $this->reset(['name', 'email', 'password', 'role', 'isEdit']);
+        // PENTING: Kirim nama modal 'user-modal'
+        $this->dispatch('open-modal', name: 'user-modal');
+
+        // $this->resetInput(); // Reset form
+        // $this->dispatch('open-modal'); // Kirim sinyal ke frontend untuk buka modal
     }
 
     public function store()
@@ -46,7 +50,8 @@ class Index extends Component
 
         $user->assignRole($this->role); // Beri Role
 
-        $this->dispatch('close-modal');
+        $this->dispatch('close-modal', name: 'user-modal');
+        // $this->dispatch('close-modal');
         $this->resetInput();
         session()->flash('message', 'User berhasil dibuat.');
     }
@@ -59,7 +64,8 @@ class Index extends Component
         $this->email = $user->email;
         $this->role = $user->roles->first()->name ?? ''; // Ambil role lama
         $this->isEdit = true;
-        $this->dispatch('open-modal'); // Buka modal saat edit
+        // $this->dispatch('open-modal'); // Buka modal saat edit
+        $this->dispatch('open-modal', name: 'user-modal');
     }
 
     public function update()

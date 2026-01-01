@@ -9,184 +9,180 @@
     
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 
     <style>
         body { font-family: 'Inter', sans-serif; }
+        /* Trix Customization */
         trix-toolbar [data-trix-button-group="file-tools"] { display: none; }
         trix-editor ul { list-style-type: disc !important; padding-left: 1.5rem !important; margin-bottom: 1rem; }
         trix-editor ol { list-style-type: decimal !important; padding-left: 1.5rem !important; margin-bottom: 1rem; }
         trix-editor blockquote { border-left: 4px solid #ccc !important; padding-left: 1rem !important; font-style: italic; }
         .trix-content { min-height: 300px; }
     </style>
+
     @fluxAppearance
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
+    
     <flux:sidebar sticky collapsible="mobile" class="bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
-        <flux:sidebar.header>
+        
+        <flux:sidebar.header class="">
             <flux:sidebar.brand
-                href="#"
-                logo="https://fluxui.dev/img/demo/logo.png"
-                logo:dark="https://fluxui.dev/img/demo/dark-mode-logo.png"
+                href="{{ route('admin.dashboard') }}"
+                logo="{{ asset('img/logo.png') }}"
                 name="Mathali'ul Anwar"
             />
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
-        <flux:sidebar.search placeholder="Search..." />
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="home" href="{{ route('admin.dashboard') }}" current>
+
+        <flux:sidebar.search placeholder="Cari menu..." />
+
+        <flux:navlist variant="outline">
+            <flux:navlist.item icon="home" href="{{ route('admin.dashboard') }}" :current="request()->routeIs('admin.dashboard')">
                 Dashboard
-            </flux:sidebar.item>
-            
+            </flux:navlist.item>
+
             @hasrole('super_admin')
-            <flux:sidebar.item icon="users" href="{{ route('admin.users.index') }}">
+            <flux:navlist.item icon="users" href="{{ route('admin.users.index') }}" :current="request()->routeIs('admin.users.*')">
                 User Management
-            </flux:sidebar.item>
+            </flux:navlist.item>
 
-            <flux:sidebar.item icon="inbox" badge="<?php echo App\Models\Message::where('status', 0)->count(); ?>" href="{{ route('admin.messages.index') }}">
+            <flux:navlist.item icon="inbox" href="{{ route('admin.messages.index') }}" :current="request()->routeIs('admin.messages.*')" badge="{{ App\Models\Message::where('status', 0)->count() ?: null }}">
                 Inbox
-            </flux:sidebar.item>
-
-            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
-                Website Management
-            </div>
-
-            <flux:sidebar.item icon="document-text" href="{{ route('admin.pages.index') }}">
-                Profil Pesantren
-            </flux:sidebar.item>
+            </flux:navlist.item>
             @endhasrole
+        </flux:navlist>
 
-            @hasanyrole('super_admin|admin_redaksi')
-            <flux:sidebar.item icon="newspaper" href="{{ route('admin.posts.index') }}">
-                Berita & Mading
-            </flux:sidebar.item>
-            @endhasanyrole
+        @hasanyrole('super_admin|admin_redaksi')
+        <flux:navlist variant="outline" class="mt-4">
+            <flux:navlist.group heading="Website Management" expandable>
+                @hasrole('super_admin')
+                <flux:navlist.item icon="document-text" href="{{ route('admin.pages.index') }}" :current="request()->routeIs('admin.pages.*')">
+                    Profil Pesantren
+                </flux:navlist.item>
+                @endhasrole
+                
+                <flux:navlist.item icon="newspaper" href="{{ route('admin.posts.index') }}" :current="request()->routeIs('admin.posts.*')">
+                    Berita & Mading
+                </flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
+        @endhasanyrole
 
-            @hasanyrole('super_admin|admin_akademik')
-            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
-                Data Master
-            </div>
+        @hasanyrole('super_admin|admin_akademik')
+        <flux:navlist variant="outline" class="mt-4">
+            <flux:navlist.group heading="Data Master" expandable>
+                <flux:navlist.item icon="academic-cap" href="{{ route('admin.santri.index') }}" :current="request()->routeIs('admin.santri.*')">
+                    Data Santri
+                </flux:navlist.item>
 
-            <flux:sidebar.item icon="academic-cap" href="{{ route('admin.santri.index') }}">
-                Data Santri
-            </flux:sidebar.item>
+                <flux:navlist.item icon="user-group" href="{{ route('admin.staff.index') }}" :current="request()->routeIs('admin.staff.*')">
+                    Data Guru & Staff
+                </flux:navlist.item>
 
-            <flux:sidebar.item icon="calendar" href="{{ route('admin.staff.index') }}">
-                Data Guru & Staff
-            </flux:sidebar.item>
+                <flux:navlist.item icon="building-office" href="{{ route('admin.dorms.index') }}" :current="request()->routeIs('admin.dorms.*')">
+                    Kamar / Asrama
+                </flux:navlist.item>
 
-            <flux:sidebar.item icon="folder-minus" href="{{ route('admin.dorms.index') }}">
-                Kamar
-            </flux:sidebar.item>
+                <flux:navlist.item icon="rectangle-stack" href="{{ route('admin.classes.index') }}" :current="request()->routeIs('admin.classes.*')">
+                    Kelas Diniyah
+                </flux:navlist.item>
 
-            <flux:sidebar.item icon="chart-bar" href="{{ route('admin.classes.index') }}">
-                Kelas Diniyah
-            </flux:sidebar.item>
+                <flux:navlist.item icon="calendar-days" href="{{ route('admin.academic.year') }}" :current="request()->routeIs('admin.academic.year')">
+                    Tahun Ajaran
+                </flux:navlist.item>
 
-            <flux:sidebar.item icon="calendar-days" href="{{ route('admin.academic.year') }}">
-                Tahun Ajaran
-            </flux:sidebar.item>
+                <flux:navlist.item icon="book-open" href="{{ route('admin.academic.subject') }}" :current="request()->routeIs('admin.academic.subject')">
+                    Mata Pelajaran
+                </flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
+        @endhasanyrole
 
-            <flux:sidebar.item icon="folder-minus" href="{{ route('admin.academic.subject') }}">
-                Mata Pelajaran
-            </flux:sidebar.item>
-            
-            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
-                Absensi
-            </div>
-            
-            <flux:sidebar.item icon="clock" href="{{ route('admin.academic.schedule') }}">
-                Jadwal Pelajaran
-            </flux:sidebar.item>
+        @hasanyrole('super_admin|admin_akademik|guru')
+        <flux:navlist variant="outline" class="mt-4">
+            <flux:navlist.group heading="KBM & Absensi" expandable>
+                @hasanyrole('super_admin|admin_akademik')
+                <flux:navlist.item icon="clock" href="{{ route('admin.academic.schedule') }}" :current="request()->routeIs('admin.academic.schedule')">
+                    Jadwal Pelajaran
+                </flux:navlist.item>
+                @endhasanyrole
 
+                <flux:navlist.item icon="clipboard-document-check" href="{{ route('admin.attendance.index') }}" :current="request()->routeIs('admin.attendance.index')">
+                    Isi Absensi
+                </flux:navlist.item>
 
-            @endhasanyrole
+                @hasanyrole('super_admin|admin_akademik')
+                <flux:navlist.item icon="chart-pie" href="{{ route('admin.attendance.report') }}" :current="request()->routeIs('admin.attendance.report')">
+                    Rekap Santri
+                </flux:navlist.item>
 
-            @hasanyrole('super_admin|admin_akademik|guru')
-            <flux:sidebar.item icon="book-open" href="{{ route('admin.attendance.index') }}">
-                Absensi Diniyah
-            </flux:sidebar.item>
-            @endhasanyrole
+                <flux:navlist.item icon="presentation-chart-line" href="{{ route('admin.attendance.teacher_report') }}" :current="request()->routeIs('admin.attendance.teacher_report')">
+                    Rekap Guru
+                </flux:navlist.item>
+                @endhasanyrole
+            </flux:navlist.group>
+        </flux:navlist>
+        @endhasanyrole
 
-            @hasanyrole('super_admin|admin_akademik')
-            <div class="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400 px-4 py-2 mt-4">
-                Rekap Absensi
-            </div>
-            
-            <flux:sidebar.item icon="check-circle" href="{{ route('admin.attendance.report') }}">
-                Santri
-            </flux:sidebar.item>
-
-            <flux:sidebar.item icon="check-circle" href="{{ route('admin.attendance.teacher_report') }}">
-                Guru
-            </flux:sidebar.item>
-            @endhasanyrole
-
-            {{-- <flux:sidebar.item icon="document-text" href="#">Documents</flux:sidebar.item>
-            <flux:sidebar.item icon="calendar" href="#">Calendar</flux:sidebar.item>
-            <flux:sidebar.group expandable heading="Favorites" class="grid">
-                <flux:sidebar.item href="#">Marketing site</flux:sidebar.item>
-                <flux:sidebar.item href="#">Android app</flux:sidebar.item>
-                <flux:sidebar.item href="#">Brand guidelines</flux:sidebar.item>
-            </flux:sidebar.group> --}}
-        </flux:sidebar.nav>
         <flux:sidebar.spacer />
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="cog-6-tooth" href="#">Settings</flux:sidebar.item>
-            <flux:sidebar.item icon="information-circle" href="#">Help</flux:sidebar.item>
-        </flux:sidebar.nav>
+
+        <flux:navlist variant="outline">
+            <flux:navlist.item icon="cog-6-tooth" href="#">Pengaturan</flux:navlist.item>
+        </flux:navlist>
+
         <flux:dropdown position="top" align="start" class="max-lg:hidden">
-            <flux:sidebar.profile avatar="https://fluxui.dev/img/demo/user.png" name="Olivia Martin" />
+            <flux:sidebar.profile 
+                avatar="{{ auth()->user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&color=7F9CF5&background=EBF4FF' }}" 
+                name="{{ auth()->user()->name }}" 
+                detail="{{ auth()->user()->roles->first()->name ?? 'User' }}"
+            />
+            
             <flux:menu>
-                <flux:menu.radio.group>
-                    <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                    {{-- <flux:menu.radio>Truly Delta</flux:menu.radio> --}}
-                </flux:menu.radio.group>
+                <flux:menu.item href="#" icon="user">Profil Saya</flux:menu.item>
                 <flux:menu.separator />
                 
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form" class="hidden">
                     @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 rounded-lg hover:text-gray-100 transition-colors">
-                        Logout
-                    </button>
                 </form>
-                {{-- <flux:menu.item>
-                </flux:menu.item> --}}
+
+                <flux:menu.item icon="arrow-right-start-on-rectangle" class="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20" type="submit" form="logout-form">
+                    Logout
+                </flux:menu.item>
             </flux:menu>
         </flux:dropdown>
+
     </flux:sidebar>
-    <flux:header class="lg:hidden">
-        <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+
+    <flux:header class="lg:hidden bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
+        <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
+        
         <flux:spacer />
-        <flux:dropdown position="top" alignt="start">
-            <flux:profile avatar="https://fluxui.dev/img/demo/user.png" />
+        
+        <flux:dropdown position="bottom" align="end">
+            <flux:profile 
+                avatar="{{ auth()->user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&color=7F9CF5&background=EBF4FF' }}" 
+            />
             <flux:menu>
-                <flux:menu.radio.group>
-                    <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                    {{-- <flux:menu.radio>Truly Delta</flux:menu.radio> --}}
-                </flux:menu.radio.group>
+                <div class="px-2 py-1.5 text-sm font-medium text-zinc-500">
+                    {{ auth()->user()->name }}
+                </div>
                 <flux:menu.separator />
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-100 transition-colors">
-                        Logout
-                    </button>
-                </form>
-                {{-- <flux:menu.item> 
-                </flux:menu.item> --}}
+                <flux:menu.item href="#" icon="user">Profil Saya</flux:menu.item>
+                <flux:menu.item icon="arrow-right-start-on-rectangle" class="text-red-500" type="submit" form="logout-form">
+                    Logout
+                </flux:menu.item>
             </flux:menu>
         </flux:dropdown>
     </flux:header>
-    <flux:main>
+
+    <flux:main class="bg-white dark:bg-zinc-800">
         {{ $slot }}
-        {{-- <flux:heading size="xl" level="1">Good afternoon, Olivia</flux:heading>
-        <flux:text class="mb-6 mt-2 text-base">Here's what's new today</flux:text>
-        <flux:separator variant="subtle" /> --}}
     </flux:main>
+
     @fluxScripts
 </body>
 </html>

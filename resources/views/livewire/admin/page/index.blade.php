@@ -1,40 +1,61 @@
-<div>
+<div class="max-w-6xl mx-auto py-8 px-4 sm:px-6">
+    
     <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Kelola Halaman Profil</h2>
-        <p class="text-gray-500 text-sm">Edit konten statis seperti Sejarah, Visi Misi, dll.</p>
+        <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Kelola Halaman Profil</h1>
+        <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Edit konten statis seperti Sejarah, Visi Misi, dan informasi sekolah lainnya.</p>
     </div>
 
-    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-100">
-        <div class="overflow-x-auto"> <table class="w-full text-left border-collapse min-w-[600px]"> <thead class="bg-pesantren-50 text-pesantren-dark uppercase text-sm font-semibold">
+    <x-card>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+                <thead class="bg-zinc-50 dark:bg-zinc-900/50">
                     <tr>
-                        <th class="px-6 py-4">Nama Halaman</th>
-                        <th class="px-6 py-4">Update Terakhir</th>
-                        <th class="px-6 py-4 text-center">Aksi</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Nama Halaman</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Update Terakhir</th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @foreach($pages as $page)
-                    <tr class="hover:bg-gray-50 transition">
+                <tbody class="bg-white dark:bg-zinc-900 divide-y divide-zinc-200 dark:divide-zinc-800">
+                    @forelse($pages as $page)
+                    <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                        
                         <td class="px-6 py-4">
-                            <div class="font-bold text-gray-900">{{ $page->title }}</div>
-                            <div class="text-xs text-gray-400 font-mono">key: {{ $page->key }}</div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-zinc-900 dark:text-white">
+                                    {{ $page->title }}
+                                </span>
+                                <span class="text-xs text-zinc-400 dark:text-zinc-500 font-mono mt-0.5">
+                                    key: {{ $page->key }}
+                                </span>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">
-                            {{ $page->updated_at->format('d M Y, H:i') }}
+
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-zinc-500 dark:text-zinc-400">
+                                {{ $page->updated_at->format('d M Y, H:i') }}
+                            </div>
                         </td>
-                        <td class="px-6 py-4 text-center">
+
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
                             <a href="{{ route('admin.pages.edit', $page->id) }}" 
-                               class="inline-block bg-pesantren-100 text-blue-500 hover:text-blue-600 px-3 py-1 rounded-md text-sm font-medium transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                               class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-zinc-700 bg-white border border-zinc-300 rounded-lg hover:bg-zinc-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-indigo-400 transition shadow-sm"
+                            >
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
-                               {{-- Edit Konten --}}
+                                Edit
                             </a>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-6 py-10 text-center text-zinc-500 dark:text-zinc-400">
+                            Tidak ada halaman profil yang tersedia.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
+    </x-card>
 </div>
