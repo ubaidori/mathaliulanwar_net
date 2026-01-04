@@ -41,7 +41,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // 2. Profile / Setting Akun (Jika ada)
     // Route::get('/profile', ...);
-});
+}); 
 
 // --- GROUP 2: KHUSUS SUPER ADMIN ---
 Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->group(function () {

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Login Admin' }} - Mathali'ul Anwar</title>
-    
+    <link rel="icon" href="{{ asset('img/logo.png') }}?v={{ time() }}" type="image/png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link rel="preconnect" href="https://fonts.bunny.net">

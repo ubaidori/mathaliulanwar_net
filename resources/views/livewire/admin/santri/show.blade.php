@@ -139,7 +139,7 @@
                         <div class="col-span-1">
                             <dt class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">Tempat, Tanggal Lahir</dt>
                             <dd class="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                {{ $santri->dob ? $santri->dob->format('d F Y') : '-' }} 
+                                {{ $santri->dob ? $santri->dob->format('d M Y') : '-' }} 
                                 @if($santri->dob)
                                     <span class="text-zinc-400 dark:text-zinc-500 font-normal text-xs ml-1">({{ $santri->dob->age }} Th)</span>
                                 @endif

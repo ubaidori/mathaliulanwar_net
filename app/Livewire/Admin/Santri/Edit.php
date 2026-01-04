@@ -8,6 +8,7 @@ use App\Models\Dorm;
 use App\Models\IslamicClass;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class Edit extends Component
 {
@@ -43,13 +44,14 @@ class Edit extends Component
         $this->gender = $santri->gender;
         $this->address = $santri->address;
         // Format tanggal agar terbaca di input date (Y-m-d)
-        $this->dob = $santri->dob ? $santri->dob->format('Y-m-d') : null;
+        $this->dob = $santri->dob ? date('d-m-Y', strtotime($santri->dob)) : null;
         $this->th_child = $santri->th_child;
         $this->siblings_count = $santri->siblings_count;
         $this->education = $santri->education;
 
         $this->registration_date = $santri->registration_date ? date('d M Y', strtotime($santri->registration_date)) : null;
-        $this->drop_date = $santri->drop_date ? $santri->drop_date->format('Y-m-d') : null;
+        $this->drop_date = $santri->drop_date ? date('d M Y', strtotime($santri->drop_date)) : null;
+        // $this->drop_date = $santri->drop_date ? $santri->drop_date->format('Y-m-d') : null;
         $this->drop_reason = $santri->drop_reason;
         $this->dorm_id = $santri->dorm_id;
         $this->islamic_class_id = $santri->islamic_class_id;
@@ -79,9 +81,26 @@ class Edit extends Component
 
     public function update()
     {
-        $this->validate();
-        
+        $this->validate([
+            'name' => 'required',
+            'gender' => 'required',
+            'photo' => 'nullable|image|max:2048',
+            'registration_date' => 'nullable|date',
+            'drop_date' => 'nullable|date',
+        ]);
+
         $santri = Santri::findOrFail($this->santriId);
+
+        // Default pakai foto lama
+        $photoPath = $santri->photo;
+
+        // Upload foto baru jika ada
+        if ($this->photo) {
+            if ($santri->photo && Storage::disk('public')->exists($santri->photo)) {
+                Storage::disk('public')->delete($santri->photo);
+            }
+            $photoPath = $this->photo->store('santri-photos', 'public');
+        }
 
         $santri->update([
             'nis' => $this->nis,
@@ -89,13 +108,16 @@ class Edit extends Component
             'name' => $this->name,
             'gender' => $this->gender,
             'address' => $this->address,
-            'dob' => $this->dob,
-            'th_child' => $this->th_child,
-            'siblings_count' => $this->siblings_count,
-            'education' => $this->education,
-            
-            'registration_date' => $this->registration_date,
-            'drop_date' => $this->drop_date, // Update tanggal keluar
+            'dob' => $this->dob ? Carbon::parse($this->dob)->format('Y-m-d') : null,
+
+            'registration_date' => $this->registration_date
+                ? Carbon::parse($this->registration_date)->format('Y-m-d')
+                : null,
+
+            'drop_date' => $this->drop_date
+                ? Carbon::parse($this->drop_date)->format('Y-m-d')
+                : null,
+
             'drop_reason' => $this->drop_reason,
             'dorm_id' => $this->dorm_id ?: null,
             'islamic_class_id' => $this->islamic_class_id ?: null,
@@ -114,25 +136,7 @@ class Edit extends Component
             'guardian_relationship' => $this->guardian_relationship,
             'guardian_phone' => $this->guardian_phone,
 
-            'photo' => 'nullable|image|max:2048',
-        ]);
-
-        $santri = Santri::findOrFail($this->santriId);
-        $photoPath = $santri->photo; // Default pakai foto lama
-
-        // Cek jika ada foto baru diupload
-        if ($this->photo) {
-            // 1. Hapus foto lama dari storage jika ada
-            if ($santri->photo && Storage::disk('public')->exists($santri->photo)) {
-                Storage::disk('public')->delete($santri->photo);
-            }
-            // 2. Simpan foto baru
-            $photoPath = $this->photo->store('santri-photos', 'public');
-        }
-
-        $santri->update([
             'photo' => $photoPath,
-            // ... update field lain ...
         ]);
 
         session()->flash('message', 'Data santri berhasil diperbarui.');

@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB; // Penting untuk Transaction
 
 class Index extends Component
@@ -79,6 +80,65 @@ class Index extends Component
         session()->flash('message', 'Staff berhasil ditambahkan. (Default Pass: password)');
     }
 
+    public function edit($id)
+    {
+        $staff = Staff::findOrFail($id);
+        $this->editId = $id;
+        $this->name = $staff->name;
+        $this->nip = $staff->nip;
+        $this->position = $staff->position;
+        $this->phone = $staff->phone;
+        $this->old_photo = $staff->photo;
+        $this->is_active = $staff->is_active;
+
+        $this->isEdit = true;
+        $this->dispatch('open-modal');
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'name' => 'required',
+            'position' => 'required',
+            'photo' => 'nullable|image|max:2048',
+        ]);
+
+        $staff = Staff::findOrFail($this->editId);
+        $photoPath = $staff->photo;
+
+        if ($this->photo) {
+            // Hapus foto lama
+            if ($staff->photo && Storage::disk('public')->exists($staff->photo)) {
+                Storage::disk('public')->delete($staff->photo);
+            }
+            $photoPath = $this->photo->store('staff-photos', 'public');
+        }
+
+        $staff->update([
+            'name' => $this->name,
+            'nip' => $this->nip,
+            'position' => $this->position,
+            'phone' => $this->phone,
+            'photo' => $photoPath,
+            'is_active' => $this->is_active,
+        ]);
+
+        $this->dispatch('close-modal');
+        $this->resetInput();
+        session()->flash('message', 'Data staff berhasil diperbarui.');
+    }
+
+    public function delete($id)
+    {
+        $staff = Staff::find($id);
+        if ($staff) {
+            if ($staff->photo && Storage::disk('public')->exists($staff->photo)) {
+                Storage::disk('public')->delete($staff->photo);
+            }
+            $staff->delete();
+            session()->flash('message', 'Data staff dihapus.');
+        }
+    }
     // ... method edit, update, delete, render (biarkan atau sesuaikan sedikit) ...
     // Pastikan di method render() Anda memuat relasi user: Staff::with('user')...
     public function render()

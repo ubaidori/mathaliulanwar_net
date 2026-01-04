@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Admin Panel' }} - Mathali'ul Anwar</title>
-    
+    <link rel="icon" href="{{ asset('img/logo.png') }}?v={{ time() }}" type="image/png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -38,7 +38,7 @@
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
 
-        <flux:sidebar.search placeholder="Cari menu..." />
+        <!-- <flux:sidebar.search placeholder="Cari menu..." /> -->
 
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="{{ route('admin.dashboard') }}" :current="request()->routeIs('admin.dashboard')">

@@ -13,6 +13,13 @@ class Santri extends Model
     // Kita gunakan guarded = [] agar semua kolom boleh diisi via Excel
     protected $guarded = ['id']; 
 
+    protected $casts = [
+    'dob' => 'date',
+    'registration_date' => 'date',
+    'drop_date' => 'date',
+    ];
+
+
     // 2. TAMBAHKAN RELASI AGAR EXPORT TIDAK ERROR
     public function dorm()
     {
